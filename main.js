@@ -16,10 +16,63 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+
+
+
+
+/*---- Scenes -----------------------------------------------------*/
+
+var current_scene;
+
 // Create scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color( 0x0 );
 scene.fog = new THREE.Fog( 0x0, 0, 200 );
+
+current_scene = scene;
+
+
+// Testing skybox scene
+const photo1_scene = new THREE.Scene();
+var skybox_geometry = new THREE.BoxGeometry(200, 200, 200);
+
+function createPathStrings(filename) {
+
+    const basePath = "./static/skybox/";
+    const baseFilename = basePath + filename;
+    const fileType = ".png";
+    const sides = ["ft", "bk", "up", "dn", "rt", "lf"];
+    const pathStings = sides.map(side => {
+        return baseFilename + "_" + side + fileType;
+    });
+
+    console.log(pathStings)
+    return pathStings;
+}
+
+function createMaterialArray(filename) {
+    const skyboxImagepaths = createPathStrings(filename);
+    const materialArray = skyboxImagepaths.map(image => {
+        let texture = new THREE.TextureLoader().load(image);
+
+        return new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide }); // <---
+    });
+
+    console.log(materialArray)
+    return materialArray;
+}
+
+const skybox_materialarray = createMaterialArray("teste");
+const skybox = new THREE.Mesh(skybox_geometry, skybox_materialarray);
+photo1_scene.add(skybox);
+
+var ambl = new THREE.AmbientLight(0xffffff, 0.3);
+photo1_scene.add(ambl);
+
+
+
+/*---- Camera and Controls ----------------------------------------*/
+
 
 // Create camera
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -78,6 +131,7 @@ const create_photo = function () {
 
 var photo = create_photo();
 photo.position.x -= 40;
+photo.photo_scene = photo1_scene;
 
 var photo2 = create_photo();
 photo2.position.x += 40;
@@ -104,7 +158,7 @@ photo2.position.z -= 40;
 
 
 
-/*---- Player movement --------------------------------------------*/
+/*---- Player Movement --------------------------------------------*/
 
 
 let moveLeft = false;
@@ -128,6 +182,10 @@ var onkeydown = function ( event ) {
         case 39: // right
         case 68: // d
             moveRight = true;
+            break;
+        case 67:
+            console.log("CCC");
+            change_scene(photo);
             break;
     }
 };
@@ -166,6 +224,13 @@ let speed = 30;
 
 /*---- Game Logic -------------------------------------------------*/
 
+const change_scene = function (photo) {
+
+    current_scene = photo.photo_scene;
+    current_scene.add(controls.getObject());
+
+}
+
 
 const update = function (delta) {
 
@@ -203,7 +268,7 @@ const render = function (delta) {
     // photo2.rotation.y -= 0.02;
 
     // composer.render( scene, camera );
-    renderer.render( scene, camera );
+    renderer.render( current_scene, camera );
 };
 
 
