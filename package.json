@@ -1,0 +1,22 @@
+{
+  "name": "ggj21",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alt-romes/ggj21.git"
+  },
+  "author": "romes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alt-romes/ggj21/issues"
+  },
+  "homepage": "https://github.com/alt-romes/ggj21#readme",
+  "dependencies": {
+    "three": "^0.125.2"
+  }
+}
