@@ -46,7 +46,6 @@ function createPathStrings(filename) {
         return baseFilename + "_" + side + fileType;
     });
 
-    console.log(pathStings)
     return pathStings;
 }
 
@@ -58,7 +57,6 @@ function createMaterialArray(filename) {
         return new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide }); // <---
     });
 
-    console.log(materialArray)
     return materialArray;
 }
 
@@ -86,7 +84,7 @@ scene.add( controls.getObject() );
 // Create raycaster: define its properties and dependencies
 const raycaster = new THREE.Raycaster();
 //TODO: TUNE THIS VALUE
-raycaster.far = 10;
+raycaster.far = 25;
 const mouse = new THREE.Vector2();
 
 
@@ -194,7 +192,10 @@ var onkeydown = function ( event ) {
         case 68: // d
             moveRight = true;
             break;
-        case 67:
+        case 69: // e
+            interact_object();
+            break;
+        case 67: // c
             console.log("CCC");
             change_scene(photo);
             break;
@@ -228,6 +229,21 @@ document.addEventListener( 'keyup', onkeyup, false );
 const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
 let speed = 30;
+
+
+
+
+
+/*---- Interact Logic ---------------------------------------------*/
+
+const interact_object = function () {
+
+    //TODO: REVIEW THIS
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(scene, true); ///scene.children doesnt work
+    console.log('Intersecting objects', intersects) 
+
+}
 
 
 
@@ -294,11 +310,6 @@ let prevTime = performance.now();
 const game_loop = function () {
 
     requestAnimationFrame( game_loop );
-
-    //TODO: REVIEW THIS
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(scene, true); ///scene.children doesnt work
-    console.log('Intersecting objects', intersects) 
 
     const time = performance.now();
     const delta = ( time - prevTime ) / 1000;
