@@ -83,6 +83,12 @@ camera.position.y = 10;
 const controls = new PointerLockControls( camera, document.body );
 scene.add( controls.getObject() );
 
+// Create raycaster: define its properties and dependencies
+const raycaster = new THREE.Raycaster();
+//TODO: TUNE THIS VALUE
+raycaster.far = 10;
+const mouse = new THREE.Vector2();
+
 
 
 
@@ -90,7 +96,12 @@ scene.add( controls.getObject() );
 /*---- HTML Control -----------------------------------------------*/
 
 
-document.getElementById("menu").addEventListener( 'click', function () { controls.lock(); } );
+document.getElementById("menu").addEventListener( 'click', function () { 
+    controls.lock();
+    mouse.x = 0;
+    mouse.y = 0;
+});
+
 controls.addEventListener( 'lock', function () { document.getElementById("blocker").style.display = 'none'; document.getElementById("menu").style.display = 'none'; } );
 controls.addEventListener( 'unlock', function () { document.getElementById("blocker").style.display = 'block'; document.getElementById("menu").style.display = ''; } );
 
@@ -283,6 +294,11 @@ let prevTime = performance.now();
 const game_loop = function () {
 
     requestAnimationFrame( game_loop );
+
+    //TODO: REVIEW THIS
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(scene, true); ///scene.children doesnt work
+    console.log('Intersecting objects', intersects) 
 
     const time = performance.now();
     const delta = ( time - prevTime ) / 1000;
