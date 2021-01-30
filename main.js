@@ -90,6 +90,7 @@ photo2.position.z -= 40;
 /*---- Other Objects Logic ----------------------------------------*/
 
 
+// Floor
 {
     const planeSize = 500;
     const planeGeo = new THREE.PlaneBufferGeometry(planeSize, planeSize);
@@ -109,54 +110,54 @@ photo2.position.z -= 40;
 let moveLeft = false;
 let moveRight = false;
 let moveForward = false;
-let movebackward = false;
+let moveBackward = false;
 
 var onkeydown = function ( event ) {
-    switch ( event.keycode ) {
+    switch ( event.keyCode ) {
         case 38: // up
         case 87: // w
-            moveforward = true;
+            moveForward = true;
             break;
         case 37: // left
         case 65: // a
-            moveleft = true; break;
+            moveLeft = true; break;
         case 40: // down
         case 83: // s
-            movebackward = true;
+            moveBackward = true;
             break;
         case 39: // right
         case 68: // d
-            moveright = true;
+            moveRight = true;
             break;
     }
 };
 
 var onkeyup = function ( event ) {
-    switch( event.keycode ) {
+    switch( event.keyCode ) {
         case 38: // up
         case 87: // w
-            moveforward = false;
+            moveForward = false;
             break;
         case 37: // left
         case 65: // a
-            moveleft = false;
+            moveLeft = false;
             break;
         case 40: // down
         case 83: // s
-            movebackward = false;
+            moveBackward = false;
             break;
         case 39: // right
         case 68: // d
-            moveright = false;
+            moveRight = false;
             break;
     }
 };
 
-document.addeventlistener( 'keydown', onkeydown, false );
-document.addeventlistener( 'keyup', onkeyup, false );
+document.addEventListener( 'keydown', onkeydown, false );
+document.addEventListener( 'keyup', onkeyup, false );
 
-const velocity = new three.vector3();
-const direction = new three.vector3();
+const velocity = new THREE.Vector3();
+const direction = new THREE.Vector3();
 let speed = 30;
 
 
