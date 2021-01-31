@@ -27,7 +27,7 @@ var current_scene;
 // Create scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color( 0x0 );
-scene.fog = new THREE.Fog( 0x0, 0, 200 );
+scene.fog = new THREE.Fog( 0x0, 0, 300 );
 
 current_scene = scene;
 
@@ -66,6 +66,8 @@ photo1_scene.add(skybox);
 
 var ambl = new THREE.AmbientLight(0xffffff, 0.3);
 photo1_scene.add(ambl);
+
+
 
 
 
@@ -118,11 +120,10 @@ window.addEventListener( 'resize', onWindowResize );
 
 
 const photo_geometry = new THREE.PlaneGeometry( 25, 25, 25 );
-const create_photo = function (path) {
-
-    // TODO: photo for texture as parameter
+const create_photo = function (path, path2, path3, dx, dy, dz) {
 
     const map = new THREE.TextureLoader().load( path );
+    map.minFilter = THREE.LinearFilter;
     const photo_material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, map: map} );
 
     const plane = new THREE.Mesh( photo_geometry, photo_material );
@@ -135,18 +136,58 @@ const create_photo = function (path) {
     const light = new THREE.RectAreaLight(0xFFFFFF, intensity, width, height);
     plane.add(light);
 
+    plane.position.x += dx;
+    plane.position.y += dy;
+    plane.position.z += dz;
+
+    plane.states = [path, path2, path3]
+    plane.state = 0;
+
     return plane;
 }
 
-var photo = create_photo("phot.png");
-photo.position.x -= 40;
+const create_center_photo = function (p1, p2, p3, p4, p5, dx, dy, dz) {
+
+    const big_photo_geometry = new THREE.PlaneGeometry( 45, 45, 45 );
+
+    const map = new THREE.TextureLoader().load( p1 );
+    map.minFilter = THREE.LinearFilter;
+    const photo_material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, map: map} );
+
+    const plane = new THREE.Mesh( big_photo_geometry, photo_material );
+    plane.position.y += 23;
+    scene.add( plane );
+    
+    const intensity = 10;
+    const width = 12;
+    const height = 4;
+    const light = new THREE.RectAreaLight(0xFFFFFF, intensity, width, height);
+    plane.add(light);
+
+    plane.states = [p1, p2, p3, p4, p5]
+    plane.state = 0;
+
+    plane.position.x += dx;
+    plane.position.y += dy;
+    plane.position.z += dz;
+
+    plane.rotation.x = Math.PI;
+
+    return plane;
+    
+}
+
+// Create the photos
+var photo = create_photo("phot.png", "phot.png", "phot.png", -40, 0, 0);
 photo.photo_scene = photo1_scene;
 
-var photo2 = create_photo("paintings/Hotel_BW.png");
-photo2.position.x += 40;
-photo2.position.z -= 40;
+var photo2 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
+var photo3 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
+var photo4 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
+var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
 
-
+var center_photo = create_center_photo("static/skybox/teste_bk.png", "static/skybox/teste_ft.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
+var photos = [photo, photo2]
 
 
 
@@ -236,6 +277,9 @@ let speed = 30;
 
 /*---- Interact Logic ---------------------------------------------*/
 
+
+var paintings_interacted = 0;
+
 const interact_object = function () {
 
     //TODO: REVIEW THIS
@@ -248,8 +292,46 @@ const interact_object = function () {
 
         console.log(intersects[0].object)
 
-        obj.material.map = new THREE.TextureLoader().load( "paintings/Hotel_A.png"  );
-        obj.children[0].color = new THREE.Color( 0xffaa00 )
+        if (obj.states != undefined && obj.interacted == undefined) {
+
+            paintings_interacted++;
+            obj.interacted = true;
+
+        }
+
+        for (let p of photos) {
+
+            let state = Math.trunc(paintings_interacted / 2);
+
+            if (state != p.state) {
+
+                p.material.map = new THREE.TextureLoader().load( p.states[state % 3] );
+                p.material.map.minFilter = THREE.LinearFilter;
+                p.state = state;
+            }
+
+            switch (state) {
+                case 0:
+                    p.children[0].color = new THREE.Color( 0xffffff )
+                    break;
+                case 1:
+                    p.children[0].color = new THREE.Color( 0xff0000 )
+                    break;
+                case 2:
+                    // Maybe light up middle
+                    p.children[0].color = new THREE.Color( 0xfff000 )
+                    break;
+            }
+        }
+
+        if (paintings_interacted < 5) {
+
+            center_photo.material.map = new THREE.TextureLoader().load( center_photo.states[paintings_interacted] );
+            center_photo.material.map.minFilter = THREE.LinearFilter;
+            center_photo.state++;
+
+        }
+
     }
 
 }
