@@ -86,7 +86,7 @@ scene.add( controls.getObject() );
 // Create raycaster: define its properties and dependencies
 const raycaster = new THREE.Raycaster();
 //TODO: TUNE THIS VALUE
-raycaster.far = 25;
+raycaster.far = 30;
 const mouse = new THREE.Vector2();
 
 
@@ -207,6 +207,22 @@ var photos = [photo, photo2]
 }
 
 
+/*---- Definitely Something ---------------------------------------*/
+
+const leave_end_screen = function( choice ) {
+
+    document.getElementById("blocker").style.display = 'none';
+    document.getElementById("menu").style.display = 'none';
+
+    canMove = true;
+
+    if (choice == "e") {
+        // Player chose reality
+    }
+    else if (choice == "c") {
+        // Player chose to forget
+    }
+}
 
 
 
@@ -217,6 +233,7 @@ let moveLeft = false;
 let moveRight = false;
 let moveForward = false;
 let moveBackward = false;
+let canMove = true;
 
 var onkeydown = function ( event ) {
     switch ( event.keyCode ) {
@@ -236,11 +253,21 @@ var onkeydown = function ( event ) {
             moveRight = true;
             break;
         case 69: // e
-            interact_object();
+            if (canMove)
+                interact_object();
+            else
+                leave_end_screen("e");
             break;
         case 67: // c
-            console.log("CCC");
-            change_scene(photo);
+            if (!canMove) {
+
+                leave_end_screen("c");
+
+            } else {
+
+                change_scene(photo);
+
+            }
             break;
     }
 };
@@ -279,7 +306,6 @@ let speed = 30;
 
 /*---- Interact Logic ---------------------------------------------*/
 
-
 var paintings_interacted = 0;
 
 const interact_object = function () {
@@ -314,20 +340,21 @@ const interact_object = function () {
                 p.material.map = new THREE.TextureLoader().load( p.states[state % 3] );
                 p.material.map.minFilter = THREE.LinearFilter;
                 p.state = state;
-            }
 
-            switch (state) {
-                case 0:
-                    p.children[0].color = new THREE.Color( 0xffffff )
-                    break;
-                case 1:
-                    p.children[0].color = new THREE.Color( 0xff0000 )
-                    break;
-                case 2:
-                    // Maybe light up middle
-                    p.children[0].color = new THREE.Color( 0xfff000 )
-                    break;
+                switch (state) {
+                    case 0:
+                        p.children[0].color = new THREE.Color( 0xffffff )
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        // Maybe light up middle
+                        p.children[0].color = new THREE.Color( 0xfff000 )
+                        break;
+                }
+
             }
+            
         }
 
         if (did_interact && paintings_interacted < 5) {
@@ -335,6 +362,20 @@ const interact_object = function () {
             center_photo.material.map = new THREE.TextureLoader().load( center_photo.states[paintings_interacted] );
             center_photo.material.map.minFilter = THREE.LinearFilter;
             center_photo.state++;
+
+        }
+
+        if (obj.center_photo) {
+
+            let menu = document.getElementById("menu")
+
+            // Last text
+            menu.innerHTML = "You had forgotten the truth... <br> <br> <span style='color:red'> But it keeps comes back...  </span> <br> <br> Press C to forget everything, press E to live on <br> " 
+
+            menu.style.display = "block"
+            document.getElementById("blocker").style.display = "block"
+
+            canMove = false
 
         }
 
@@ -367,11 +408,11 @@ const update = function (delta) {
         direction.x = Number( moveRight ) - Number( moveLeft );
         direction.normalize(); // this ensures consistent movements in all directions
 
-        if ( moveForward || moveBackward ) velocity.z -= direction.z * speed * delta;
+        if (moveForward || moveBackward) velocity.z -= direction.z * speed * delta;
         if ( moveLeft || moveRight ) velocity.x -= direction.x * speed * delta;
 
-        controls.moveRight( - velocity.x * delta );
-        controls.moveForward( - velocity.z * delta );
+        canMove && controls.moveRight( - velocity.x * delta );
+        canMove && controls.moveForward( - velocity.z * delta );
     }
 
 };
