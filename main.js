@@ -118,11 +118,11 @@ window.addEventListener( 'resize', onWindowResize );
 
 
 const photo_geometry = new THREE.PlaneGeometry( 25, 25, 25 );
-const create_photo = function () {
+const create_photo = function (path) {
 
     // TODO: photo for texture as parameter
 
-    const map = new THREE.TextureLoader().load( 'phot.png' );
+    const map = new THREE.TextureLoader().load( path );
     const photo_material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, map: map} );
 
     const plane = new THREE.Mesh( photo_geometry, photo_material );
@@ -138,11 +138,11 @@ const create_photo = function () {
     return plane;
 }
 
-var photo = create_photo();
+var photo = create_photo("phot.png");
 photo.position.x -= 40;
 photo.photo_scene = photo1_scene;
 
-var photo2 = create_photo();
+var photo2 = create_photo("paintings/Hotel_BW.png");
 photo2.position.x += 40;
 photo2.position.z -= 40;
 
@@ -242,6 +242,15 @@ const interact_object = function () {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(scene, true); ///scene.children doesnt work
     console.log('Intersecting objects', intersects) 
+
+    if (intersects.length > 0) {
+        let obj = intersects[0].object;
+
+        console.log(intersects[0].object)
+
+        obj.material.map = new THREE.TextureLoader().load( "paintings/Hotel_A.png"  );
+        obj.children[0].color = new THREE.Color( 0xffaa00 )
+    }
 
 }
 

@@ -1,0 +1,26 @@
+
+Base: Realidade fictícia que se mostra falsa, e confrontam-se - dando uma escolha ao jogador
+.
+.
+.
+
+Ideias paralelas: Cores vão empilhando e actualizando as imagens
+                : Quadro central onde a imagem final vai estar
+                : Quadro central é preenchido à medida que se visitam as outras imagens
+                : 
+                
+Por agora, fazer: Escolher 6 imagens, 1 delas para o centro
+                : O player ao ver 2 imagens, causa uma mudança em todas as imagens - e torna a música mais tensa
+                : O player ao ver +2 imagens, causa uma segunda mudança - e torna a música mais tensa
+                : O player ao ver a 5 imagem, desbloqueia por completo a imagem central - e torna a música insuportável
+                : O player ao ver a imagem central, ouve uma fala por cima da música tensa, e desbloqueia a opção
+                : O player escolhe esquecer as imagens, ou viver com elas
+                : Se o player escolher esquecer, as imagens revertem para a forma original
+
+
+
+
+.
+.
+.
+Final: Decisão sobre em qual das realidades permanecer
