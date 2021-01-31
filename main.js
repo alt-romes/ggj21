@@ -185,9 +185,9 @@ const create_center_photo = function (p1, p2, p3, p4, p5, dx, dy, dz) {
 var photo = create_photo("phot.png", "phot.png", "phot.png", -100, 0, -15,10.5);
 photo.photo_scene = photo1_scene;
 
-var photo2 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 0, 0, -60, Math.PI);
-var photo3 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", -100, 0, 60, -20);
-var photo4 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 100, 0, 60, 20);
+var photo2 = create_photo("paintings/forestb&w.jpeg", "paintings/forest.jpeg", "paintings/forestred.jpeg", 0, 0, -60, Math.PI);
+var photo3 = create_photo("paintings/barn.jpeg", "paintings/barnfked.jpeg", "paintings/barnred.jpeg", -100, 0, 60, -20);
+var photo4 = create_photo("paintings/chair.jpeg", "paintings/chaircolor.jpeg", "paintings/chairred.jpeg", 100, 0, 60, 20);
 var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 100, 0, -15, -180);
 
 var center_photo = create_center_photo("paintings/Hotel_BW.png", "static/skybox/teste_dn.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
