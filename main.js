@@ -101,7 +101,6 @@ audioLoader.load('./audio/Silent Sorrows.mp3', function(buffer){
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.setVolume(0.5);
-    sound.play();
 });
 
 
@@ -114,6 +113,8 @@ document.getElementById("menu").addEventListener( 'click', function () {
     controls.lock();
     mouse.x = 0;
     mouse.y = 0;
+
+    sound.play();
 });
 
 controls.addEventListener( 'lock', function () { document.getElementById("blocker").style.display = 'none'; document.getElementById("menu").style.display = 'none'; } );
@@ -357,6 +358,8 @@ const interact_object = function () {
 
             did_interact = true;
 
+            playInteractionSound(photos.indexOf(obj)+1);
+
         }
 
         for (let p of photos) {
@@ -382,6 +385,10 @@ const interact_object = function () {
 
             }
             
+        }
+
+        if (paintings_interacted == 4) {
+            changeSoundtrack();            
         }
 
         if (did_interact && paintings_interacted == 5) {
