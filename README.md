@@ -2,7 +2,7 @@
 
 The game is live at http://alegoriadoperdido.tk
 
-And is hosted at https://globalgamejam.org/2021/games/alegoria-do-perdido-6 
+And was submitted at https://globalgamejam.org/2021/games/alegoria-do-perdido-6 
 
 ---
 
