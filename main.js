@@ -76,7 +76,7 @@ photo1_scene.add(ambl);
 
 // Create camera
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.z = 20;
+camera.position.z = 100;
 camera.position.y = 10;
 
 // Create controls for movement
@@ -96,7 +96,7 @@ const mouse = new THREE.Vector2();
 /*---- HTML Control -----------------------------------------------*/
 
 
-document.getElementById("menu").addEventListener( 'click', function () { 
+document.getElementById("menu").addEventListener( 'click', function () {
     controls.lock();
     mouse.x = 0;
     mouse.y = 0;
@@ -120,7 +120,8 @@ window.addEventListener( 'resize', onWindowResize );
 
 
 const photo_geometry = new THREE.PlaneGeometry( 25, 25, 25 );
-const create_photo = function (path, path2, path3, dx, dy, dz) {
+
+const create_photo = function (path, path2, path3, dx, dy, dz,r) {
 
     const map = new THREE.TextureLoader().load( path );
     map.minFilter = THREE.LinearFilter;
@@ -129,7 +130,7 @@ const create_photo = function (path, path2, path3, dx, dy, dz) {
     const plane = new THREE.Mesh( photo_geometry, photo_material );
     plane.position.y += 13;
     scene.add( plane );
-    
+
     const intensity = 10;
     const width = 12;
     const height = 4;
@@ -143,6 +144,7 @@ const create_photo = function (path, path2, path3, dx, dy, dz) {
     plane.states = [path, path2, path3]
     plane.state = 0;
 
+    plane.rotation.y = r;
     return plane;
 }
 
@@ -157,7 +159,7 @@ const create_center_photo = function (p1, p2, p3, p4, p5, dx, dy, dz) {
     const plane = new THREE.Mesh( big_photo_geometry, photo_material );
     plane.position.y += 23;
     scene.add( plane );
-    
+
     const intensity = 10;
     const width = 12;
     const height = 4;
@@ -171,25 +173,25 @@ const create_center_photo = function (p1, p2, p3, p4, p5, dx, dy, dz) {
     plane.position.y += dy;
     plane.position.z += dz;
 
-    plane.rotation.x = Math.PI;
+    plane.rotation.y = Math.PI;
 
     plane.center_photo = true;
 
     return plane;
-    
+
 }
 
 // Create the photos
-var photo = create_photo("phot.png", "phot.png", "phot.png", -40, 0, 0);
+var photo = create_photo("phot.png", "phot.png", "phot.png", -100, 0, -15,10.5);
 photo.photo_scene = photo1_scene;
 
-var photo2 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
-var photo3 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
-var photo4 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
-var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
+var photo2 = create_photo("paintings/forestb&w.jpeg", "paintings/forest.jpeg", "paintings/forestred.jpeg", 0, 0, -60, Math.PI);
+var photo3 = create_photo("paintings/barn.jpeg", "paintings/barnfked.jpeg", "paintings/barnred.jpeg", -100, 0, 60, -20);
+var photo4 = create_photo("paintings/chair.jpeg", "paintings/chaircolor.jpeg", "paintings/chairred.jpeg", 100, 0, 60, 20);
+var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 100, 0, -15, -180);
 
-var center_photo = create_center_photo("static/skybox/teste_bk.png", "static/skybox/teste_dn.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
-var photos = [photo, photo2]
+var center_photo = create_center_photo("paintings/Hotel_BW.png", "static/skybox/teste_dn.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
+var photos = [photo, photo2, photo3, photo4, photo5]
 
 
 
@@ -313,7 +315,7 @@ const interact_object = function () {
     //TODO: REVIEW THIS
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(scene, true); ///scene.children doesnt work
-    console.log('Intersecting objects', intersects) 
+    console.log('Intersecting objects', intersects)
 
     if (intersects.length > 0) {
         let obj = intersects[0].object;
@@ -417,8 +419,7 @@ const update = function (delta) {
 
 };
 
-photo.rotation.y = -90;
-photo2.rotation.y = 90;
+
 
 
 
@@ -454,7 +455,7 @@ const game_loop = function () {
 
     update(delta);
     render(delta);
-    
+
     prevTime = time;
 };
 
