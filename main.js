@@ -67,8 +67,11 @@ photo1_scene.add(skybox);
 var ambl = new THREE.AmbientLight(0xffffff, 0.3);
 photo1_scene.add(ambl);
 
-
-
+const center_photo_scene = new THREE.Scene();
+const skybox2materialarray = createMaterialArray("center"); // TODO: ADD CENTER IMAGES FOR SKYBOX
+const skybox2 = new THREE.Mesh(skybox_geometry, skybox2materialarray);
+center_photo_scene.add(skybox2);
+center_photo_scene.add(ambl);
 
 
 /*---- Camera and Controls ----------------------------------------*/
@@ -188,9 +191,10 @@ photo.photo_scene = photo1_scene;
 var photo2 = create_photo("paintings/forestb&w.jpeg", "paintings/forest.jpeg", "paintings/forestred.jpeg", 0, 0, -60, Math.PI);
 var photo3 = create_photo("paintings/barn.jpeg", "paintings/barnfked.jpeg", "paintings/barnred.jpeg", -100, 0, 60, -20);
 var photo4 = create_photo("paintings/chair.jpeg", "paintings/chaircolor.jpeg", "paintings/chairred.jpeg", 100, 0, 60, 20);
-var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 100, 0, -15, -180);
+var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel.png", "paintings/Hotel_RED.png", 100, 0, -15, -180);
 
 var center_photo = create_center_photo("paintings/Hotel_BW.png", "static/skybox/teste_dn.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
+center_photo.photo_scene = center_photo_scene;
 var photos = [photo, photo2, photo3, photo4, photo5]
 
 
@@ -216,14 +220,20 @@ const leave_end_screen = function( choice ) {
     document.getElementById("blocker").style.display = 'none';
     document.getElementById("menu").style.display = 'none';
 
+    document.getElementById("menu").innerHTML = " Instructions:<br> <br> Move - WASD <br>   Interact - E <br> <br><br><br> Click to play"
+
     canMove = true;
 
     if (choice == "e") {
         // Player chose reality
+
     }
     else if (choice == "c") {
+        paintings_interacted = 0;
         // Player chose to forget
     }
+
+    add_to_db(choice);
 }
 
 
@@ -245,7 +255,8 @@ var onkeydown = function ( event ) {
             break;
         case 37: // left
         case 65: // a
-            moveLeft = true; break;
+            moveLeft = true;
+            break;
         case 40: // down
         case 83: // s
             moveBackward = true;
@@ -257,19 +268,22 @@ var onkeydown = function ( event ) {
         case 69: // e
             if (canMove)
                 interact_object();
-            else
+            else {
+
                 leave_end_screen("e");
+                change_scene(center_photo);
+            }
             break;
         case 67: // c
             if (!canMove) {
 
                 leave_end_screen("c");
 
-            } else {
-
-                change_scene(photo);
-
             }
+            break;
+
+        case 71:
+            change_scene(photo);
             break;
     }
 };
@@ -350,13 +364,18 @@ const interact_object = function () {
                     case 1:
                         break;
                     case 2:
-                        // Maybe light up middle
-                        p.children[0].color = new THREE.Color( 0xfff000 )
+                        p.children[0].color = new THREE.Color( 0xff0000 )
                         break;
                 }
 
             }
             
+        }
+
+        if (did_interact && paintings_interacted == 5) {
+
+            center_photo.children[0].color = new THREE.Color(0xff0000);
+
         }
 
         if (did_interact && paintings_interacted < 5) {
@@ -367,12 +386,12 @@ const interact_object = function () {
 
         }
 
-        if (obj.center_photo) {
+        if (obj.center_photo && paintings_interacted == 5) {
 
             let menu = document.getElementById("menu")
 
             // Last text
-            menu.innerHTML = "You had forgotten the truth... <br> <br> <span style='color:red'> But it keeps comes back...  </span> <br> <br> Press C to forget everything, press E to live on <br> " 
+            menu.innerHTML = "You had forgotten the truth... <br> <br> <span style='color:red'> But it keeps comes back...  </span> <br> <br> Press C to forget everything, press E to see the truth <br> " 
 
             menu.style.display = "block"
             document.getElementById("blocker").style.display = "block"
