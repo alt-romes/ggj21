@@ -197,7 +197,7 @@ const create_center_photo = function (p1, p2, p3, p4, p5, dx, dy, dz) {
 }
 
 // Create the photos
-var photo = create_photo("phot.png", "phot.png", "phot.png", -100, 0, -15,10.5);
+var photo = create_photo("paintings/lastbw.jpg", "paintings/last.jpg", "paintings/lastred.jpg", -100, 0, -15,10.5);
 photo.photo_scene = photo1_scene;
 
 var photo2 = create_photo("paintings/forestb&w.jpeg", "paintings/forest.jpeg", "paintings/forestred.jpeg", 0, 0, -60, Math.PI);
@@ -205,7 +205,7 @@ var photo3 = create_photo("paintings/barn.jpeg", "paintings/barnfked.jpeg", "pai
 var photo4 = create_photo("paintings/chair.jpeg", "paintings/chaircolor.jpeg", "paintings/chairred.jpeg", 100, 0, 60, 20);
 var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel.png", "paintings/Hotel_RED.png", 100, 0, -15, -180);
 
-var center_photo = create_center_photo("paintings/Hotel_BW.png", "static/skybox/teste_dn.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
+var center_photo = create_center_photo("paintings/center1.png", "static/skybox/center2.png", "static/skybox/center3.png", "static/skybox/center4.png", "static/skybox/center5.png", 0, 0, 0);
 center_photo.photo_scene = center_photo_scene;
 var photos = [photo, photo2, photo3, photo4, photo5]
 
@@ -232,20 +232,47 @@ const leave_end_screen = function( choice ) {
     document.getElementById("blocker").style.display = 'none';
     document.getElementById("menu").style.display = 'none';
 
-    document.getElementById("menu").innerHTML = " Instructions:<br> <br> Move - WASD <br>   Interact - E <br> <br><br><br> Click to play"
+    document.getElementById("menu").innerHTML = " Instructions:<br> <br> Move - WASD <br>   Interact with paintings - E <br> <br><br><br> Click to play"
 
     canMove = true;
 
     if (choice == "e") {
         // Player chose reality
 
+        change_scene(center_photo);
     }
     else if (choice == "c") {
         paintings_interacted = 0;
+        for (let p of photos) {
+
+            p.interacted = false;
+
+            let state = Math.trunc(paintings_interacted / 2);
+
+            if (state != p.state) {
+
+                p.material.map = new THREE.TextureLoader().load( p.states[state % 3] );
+                p.material.map.minFilter = THREE.LinearFilter;
+                p.state = state;
+
+                switch (state) {
+                    case 0:
+                        p.children[0].color = new THREE.Color( 0xffffff )
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        p.children[0].color = new THREE.Color( 0xff0000 )
+                        break;
+                }
+
+            }
+            
+        }
         // Player chose to forget
     }
 
-    add_to_db(choice);
+    // add_to_db(choice);
 }
 
 
@@ -283,7 +310,6 @@ var onkeydown = function ( event ) {
             else {
 
                 leave_end_screen("e");
-                change_scene(center_photo);
             }
             break;
         case 67: // c
