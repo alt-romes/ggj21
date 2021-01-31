@@ -173,6 +173,8 @@ const create_center_photo = function (p1, p2, p3, p4, p5, dx, dy, dz) {
 
     plane.rotation.x = Math.PI;
 
+    plane.center_photo = true;
+
     return plane;
     
 }
@@ -186,7 +188,7 @@ var photo3 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "
 var photo4 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
 var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel_RED.png", "paintings/Hotel_A.png", 40, 0, -40);
 
-var center_photo = create_center_photo("static/skybox/teste_bk.png", "static/skybox/teste_ft.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
+var center_photo = create_center_photo("static/skybox/teste_bk.png", "static/skybox/teste_dn.png", "static/skybox/teste_up.png", "static/skybox/teste_rt.png", "static/skybox/teste_lf.png", 0, 0, 0);
 var photos = [photo, photo2]
 
 
@@ -292,10 +294,14 @@ const interact_object = function () {
 
         console.log(intersects[0].object)
 
-        if (obj.states != undefined && obj.interacted == undefined) {
+        let did_interact = false;
+
+        if (obj.states != undefined && obj.interacted == undefined && !obj.center_photo) {
 
             paintings_interacted++;
             obj.interacted = true;
+
+            did_interact = true;
 
         }
 
@@ -324,7 +330,7 @@ const interact_object = function () {
             }
         }
 
-        if (paintings_interacted < 5) {
+        if (did_interact && paintings_interacted < 5) {
 
             center_photo.material.map = new THREE.TextureLoader().load( center_photo.states[paintings_interacted] );
             center_photo.material.map.minFilter = THREE.LinearFilter;
