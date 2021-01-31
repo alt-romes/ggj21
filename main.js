@@ -16,10 +16,6 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-
-
-
-
 /*---- Scenes -----------------------------------------------------*/
 
 var current_scene;
@@ -89,6 +85,21 @@ const raycaster = new THREE.Raycaster();
 raycaster.far = 25;
 const mouse = new THREE.Vector2();
 
+//Create Audio Listener
+const backgroundListener = new THREE.AudioListener();
+const soundEffectListener = new THREE.AudioListener();
+camera.add(soundEffectListener);
+camera.add(backgroundListener);
+const sound = new THREE.Audio(backgroundListener);
+const effect = new THREE.Audio(soundEffectListener);
+
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load('./audio/Silent Sorrows.mp3', function(buffer){
+    sound.setBuffer(buffer);
+    sound.setLoop(true);
+    sound.setVolume(0.5);
+    sound.play();
+});
 
 
 
@@ -291,6 +302,7 @@ const interact_object = function () {
     const intersects = raycaster.intersectObject(scene, true); ///scene.children doesnt work
     console.log('Intersecting objects', intersects)
 
+
     if (intersects.length > 0) {
         let obj = intersects[0].object;
 
@@ -379,7 +391,35 @@ const update = function (delta) {
 };
 
 
+/*---- Audio Playback Functions ------------------------------------*/
 
+function playInteractionSound(sample){ //int sample for audio sample detection (1 to 6)
+    //add switch dependant on different portal interaction
+    if (!(sample < 1 || sample > 6)){
+        const audio = './audio/'+sample+'.mp3';
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load(audio, function(buffer){
+            effect.setBuffer(buffer);
+            effect.setLoop(false);
+            effect.setVolume(0.75);
+            effect.play();
+        });
+    }
+    else{
+        console.log("Invalid Audio Sample Number!");
+    }
+
+}
+
+function changeSoundtrack(){
+    sound.stop();
+    audioLoader.load('./audio/Silent Sorrows (Dark).mp3', function(buffer){
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(0.5);
+        sound.play();
+    })
+}
 
 
 
