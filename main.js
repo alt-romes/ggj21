@@ -1,6 +1,6 @@
-import * as THREE from './node_modules/three/build/three.module.js'
-import {PointerLockControls} from './node_modules/three/examples/jsm/controls/PointerLockControls.js'
-import {RectAreaLightUniformsLib} from './node_modules/three/examples/jsm/lights/RectAreaLightUniformsLib.js';
+// import * as THREE from './node_modules/three/build/three.module.js'
+// import {PointerLockControls} from './node_modules/three/examples/jsm/controls/PointerLockControls.js'
+// import {RectAreaLightUniformsLib} from './node_modules/three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 
 
 
@@ -9,7 +9,7 @@ import {RectAreaLightUniformsLib} from './node_modules/three/examples/jsm/lights
 /*---- Important Global Objects -----------------------------------*/
 
 // Needed for RectAreaLighting
-RectAreaLightUniformsLib.init();
+THREE.RectAreaLightUniformsLib.init();
 
 // Create renderer
 const renderer = new THREE.WebGLRenderer();
@@ -34,7 +34,7 @@ var skybox_geometry = new THREE.BoxGeometry(200, 200, 200);
 
 function createPathStrings(filename) {
 
-    const basePath = "./static/skybox/";
+    const basePath = "./skybox/";
     const baseFilename = basePath + filename;
     const fileType = ".png";
     const sides = ["ft", "bk", "up", "dn", "rt", "lf"];
@@ -79,7 +79,7 @@ camera.position.z = 100;
 camera.position.y = 10;
 
 // Create controls for movement
-const controls = new PointerLockControls( camera, document.body );
+const controls = new THREE.PointerLockControls( camera, document.body );
 scene.add( controls.getObject() );
 
 // Create raycaster: define its properties and dependencies
@@ -205,7 +205,7 @@ var photo3 = create_photo("paintings/barn.jpeg", "paintings/barnfked.jpeg", "pai
 var photo4 = create_photo("paintings/chair.jpeg", "paintings/chaircolor.jpeg", "paintings/chairred.jpeg", 100, 0, 60, 20);
 var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel.png", "paintings/Hotel_RED.png", 100, 0, -15, -180);
 
-var center_photo = create_center_photo("paintings/center1.png", "static/skybox/center2.png", "static/skybox/center3.png", "static/skybox/center4.png", "static/skybox/center5.png", 0, 0, 0);
+var center_photo = create_center_photo("paintings/center1.png", "paintings/center2.png", "paintings/center3.png", "paintings/center4.png", "paintings/center5.png", 0, 0, 0);
 center_photo.photo_scene = center_photo_scene;
 var photos = [photo, photo2, photo3, photo4, photo5]
 
@@ -436,7 +436,7 @@ const interact_object = function () {
             let menu = document.getElementById("menu")
 
             // Last text
-            menu.innerHTML = "You had forgotten the truth... <br> <br> <span style='color:red'> But it keeps comes back...  </span> <br> <br> Press C to forget everything, press E to see the truth <br> " 
+            menu.innerHTML = "You were living a lie... <br> <br> <span style='color:red'> But the truth keeps coming back...  </span> <br> <br> Press C to forget everything, press E to see the truth <br> " 
 
             menu.style.display = "block"
             document.getElementById("blocker").style.display = "block"
