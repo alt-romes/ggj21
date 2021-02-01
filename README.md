@@ -1,6 +1,6 @@
 ## GGJ21
 
-The game is live at http://alt-romes.github.com/ggj21
+The game is live at http://alt-romes.github.io/ggj21
 
 And was submitted at https://globalgamejam.org/2021/games/alegoria-do-perdido-6 
 
