@@ -205,7 +205,7 @@ var photo3 = create_photo("paintings/barn.jpeg", "paintings/barnfked.jpeg", "pai
 var photo4 = create_photo("paintings/chair.jpeg", "paintings/chaircolor.jpeg", "paintings/chairred.jpeg", 100, 0, 60, 20);
 var photo5 = create_photo("paintings/Hotel_BW.png", "paintings/Hotel.png", "paintings/Hotel_RED.png", 100, 0, -15, -180);
 
-var center_photo = create_center_photo("", "paintings/center2.png", "paintings/center3.png", "paintings/center4.png", "paintings/center5.png", 0, 0, 0);
+var center_photo = create_center_photo("paintings/center1.png", "paintings/center2.png", "paintings/center3.png", "paintings/center4.png", "paintings/center5.png", 0, 0, 0);
 center_photo.photo_scene = center_photo_scene;
 var photos = [photo, photo2, photo3, photo4, photo5]
 
